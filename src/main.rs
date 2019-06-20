@@ -1,6 +1,6 @@
 mod bird;
 mod pipe;
-mod render_pl;
+mod tex_loader;
 
 extern crate graphics;
 extern crate piston;
@@ -27,28 +27,31 @@ fn main() {
         .unwrap_or_else(|e| panic!("Window didn't build: {}", e));
 
 
-    // intialize entities
-    let am: render_pl::AssetMap = render_pl::AssetMap::load_assets(&mut window);
-    // event loop
+    // intialize entity textures
+    let am: tex_loader::AssetMap = tex_loader::AssetMap::load_assets(&mut window);
 
     let mut events = Events::new(EventSettings::new().ups(60).max_fps(60));
     let ds = graphics::DrawState::default();
+
+    //TODO: move all these variables into GAMESTATE struct
     let mut stage_offset: f64 = 0.0;
     let mut xvel: f64 = 1.0; // the starting x velocity
+    let mut score: u32 = 0;
+
     while let Some(ev) = events.next(&mut window) {
 
-        if let Some(_) = ev.update_args() {}
+        if let Some(_) = ev.update_args() {
+            xvel = ((score / 10) + 1) as f64;
+        }
 
         if let Some(_) = ev.render_args() {
-            // increment stage movement
 
+            // increment stage movement
             stage_offset -= xvel;
             stage_offset %= WINDIMS[1];
-            // Background draw, in reality this should
-            // be defined within its own module
+            // BACKGROUND PARALLAX CODE BEGIN
             window.draw_2d(&ev, |c, g, _| {
                 clear([1.0; 4], g);
-
                 // Background Section
                 // due to math, there are always three images
                 for image_idx in 0..3 {
@@ -59,7 +62,7 @@ fn main() {
                     // call makeup : image itself, context mutations, graphics
                     j.draw(&am.bg_tex, &ds, c.transform, g);
                 }
-
+                // BACKGROUND PARALLAX CODE END
             });
         }
 
