@@ -1,0 +1,9 @@
+[package]
+name = "flappy"
+version = "0.1.0"
+authors = ["mobile-bungalow <pwmay@ucsc.edu>"]
+edition = "2018"
+
+[dependencies]
+vecmath = "1.0"
+piston_window = "0.94.0"
