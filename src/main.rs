@@ -23,7 +23,7 @@ fn main() {
 
 
     // intialize entities
-
+    let am: render_pl::AssetMap = render_pl::AssetMap::load_assets(&mut window);
     // event loop
 
     let mut events = Events::new(EventSettings::new().ups(60).max_fps(60));
@@ -31,5 +31,9 @@ fn main() {
 
     while let Some(ev) = events.next(&mut window) {
         if let Some(_) = ev.update_args() {}
+        window.draw_2d(&ev, |c, g, _| {
+            clear([1.0; 4], g);
+            image(&am.bg_tex, c.transform, g);
+        });
     }
 }
