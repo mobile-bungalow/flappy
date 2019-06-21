@@ -9,7 +9,7 @@ static G: f64 = 0.15;
 ///bird struct
 pub struct Bird {
     //bird's x position within the current window, in order to track collisions. not used in render
-    pub xpos: f64,
+    pub window_pos: f64,
     //bird's y position
     pub ypos: f64,
     //bird's up velocity
@@ -21,7 +21,7 @@ pub struct Bird {
 impl Bird {
     pub fn new() -> Bird {
         Bird {
-            xpos: 40.0,
+            window_pos: 40.0,
             ypos: 150.0,
             up_vel: 0.0,
             collide: false,
@@ -32,7 +32,7 @@ impl Bird {
         // accelerated fall over time determined by gravity
         self.up_vel -= G;
         // increment x position to track position relative to other objects
-        self.xpos += 1.0;
+        self.window_pos += 1.0;
         // decrement y position to signify falling
         self.ypos -= self.up_vel;
     }
