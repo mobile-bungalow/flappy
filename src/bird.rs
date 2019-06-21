@@ -4,7 +4,6 @@ extern crate graphics;
 extern crate piston;
 use piston::event_loop::{EventLoop, EventSettings, Events};
 
-
 static G: f64 = 0.15;
 
 pub struct Bird {
@@ -30,8 +29,12 @@ impl Bird {
         self.ypos -= self.up_vel;
     }
 
-
-    pub fn key_event(&mut self, key: piston::input::Button) {
-        self.up_vel = 4.0;
+    pub fn key_event(&mut self, button: piston::input::Button) {
+        if let Button::Keyboard(key) = button {
+            match key {
+                Key::Space => self.up_vel = 4.0,
+                _ => {}
+            }
+        }
     }
 }
