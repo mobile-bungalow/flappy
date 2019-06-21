@@ -66,7 +66,7 @@ fn main() {
                 }
                 // BACKGROUND PARALLAX CODE END
                 // BIRD DRAWING CODE
-                let bimage = Image::new().rect(square(state.bird.xpos, state.bird.ypos, 35.0));
+                let bimage = Image::new().rect(square(state.bird_pos, state.bird.ypos, 35.0));
                 bimage.draw(&am.bird_tex, &ds, c.transform, g);
                 // BIRD DRAWING CODE END
             });
