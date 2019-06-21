@@ -42,13 +42,17 @@ fn main() {
 
     while let Some(ev) = events.next(&mut window) {
 
+        if let Some(p) = ev.press_args() {
+            bird.key_event(p);
+        }
+
         if let Some(_) = ev.update_args() {
             // increment challenge as it runs
             //  xvel = ((score / 10) + 1) as f64;
             //  check and set pipe state
             bird.update(&ev);
-
         }
+
 
         if let Some(_) = ev.render_args() {
 

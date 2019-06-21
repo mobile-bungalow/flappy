@@ -1,12 +1,11 @@
 use piston_window::*;
 
 extern crate graphics;
-use graphics::rectangle::square;
 extern crate piston;
 use piston::event_loop::{EventLoop, EventSettings, Events};
 
 
-static G: f64 = 0.002;
+static G: f64 = 0.15;
 
 pub struct Bird {
     pub xpos: f64,
@@ -29,19 +28,10 @@ impl Bird {
         self.up_vel -= G;
         //self.xpos += 1.0; // should be a variable once xvel is in game_state
         self.ypos -= self.up_vel;
-        self.key_event(ev);
     }
 
 
-    fn key_event(&mut self, e: &Event) {
-
-        if let Some(button) = e.press_args() {
-            if let Button::Keyboard(key) = button {
-                match key {
-                    Key::Space => self.up_vel = 6.0,
-                    _ => {}
-                }
-            }
-        }
+    pub fn key_event(&mut self, key: piston::input::Button) {
+        self.up_vel = 4.0;
     }
 }
