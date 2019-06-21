@@ -16,6 +16,7 @@ pub struct Bird {
     pub up_vel: f64,
     //whether or not the bird has collided with another object
     pub collide: bool,
+    pub is_pressed: bool,
 }
 
 impl Bird {
@@ -25,16 +26,22 @@ impl Bird {
             ypos: 150.0,
             up_vel: 0.0,
             collide: false,
+            is_pressed: false,
         }
     }
 
     pub fn update(&mut self, ev: &Event) {
         // accelerated fall over time determined by gravity
-        self.up_vel -= G;
         // increment x position to track position relative to other objects
         self.window_pos += 1.0;
         // decrement y position to signify falling
-        self.ypos -= self.up_vel;
+        match self.is_pressed {
+            true => {
+                self.up_vel -= G;
+                self.ypos -= self.up_vel;
+            }
+            false => {}
+        }
     }
 
     ///behaviour determined by key presses
@@ -42,7 +49,10 @@ impl Bird {
         if let Button::Keyboard(key) = button {
             match key {
                 //if the key pressed is a space, bird jumps
-                Key::Space => self.up_vel = 4.0,
+                Key::Space => {
+                    self.up_vel = 4.0;
+                    self.is_pressed = true;
+                }
                 _ => {}
             }
         }
