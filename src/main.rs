@@ -34,14 +34,20 @@ fn main() {
     let ds = graphics::DrawState::default();
 
     //TODO: move all these variables into GAMESTATE struct
+    let mut pipe_deque: Vec<pipe::Pipe> = Vec::new(); // maintains list of pipe items
     let mut stage_offset: f64 = 0.0;
-    let mut xvel: f64 = 1.0; // the starting x velocity
+    let mut xvel: f64 = 1.8; // the starting x velocity
     let mut score: u32 = 0;
+    let mut bird: bird::Bird = bird::Bird::new();
 
     while let Some(ev) = events.next(&mut window) {
 
         if let Some(_) = ev.update_args() {
-            xvel = ((score / 10) + 1) as f64;
+            // increment challenge as it runs
+            //  xvel = ((score / 10) + 1) as f64;
+            //  check and set pipe state
+            bird.update(&ev);
+
         }
 
         if let Some(_) = ev.render_args() {
@@ -49,9 +55,10 @@ fn main() {
             // increment stage movement
             stage_offset -= xvel;
             stage_offset %= WINDIMS[1];
-            // BACKGROUND PARALLAX CODE BEGIN
             window.draw_2d(&ev, |c, g, _| {
+                // clear bg
                 clear([1.0; 4], g);
+                // BACKGROUND PARALLAX CODE BEGIN
                 // Background Section
                 // due to math, there are always three images
                 for image_idx in 0..3 {
@@ -63,7 +70,12 @@ fn main() {
                     j.draw(&am.bg_tex, &ds, c.transform, g);
                 }
                 // BACKGROUND PARALLAX CODE END
+                // BIRD DRAWING CODE
+                let bimage = Image::new().rect(square(bird.xpos, bird.ypos, 35.0));
+                bimage.draw(&am.bird_tex, &ds, c.transform, g);
+                // BIRD DRAWING CODE END
             });
+
         }
 
     }
