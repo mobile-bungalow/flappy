@@ -17,6 +17,7 @@ pub struct Bird {
     //whether or not the bird has collided with another object
     pub collide: bool,
     pub is_pressed: bool,
+    pub rotation: f64,
 }
 
 impl Bird {
@@ -27,10 +28,11 @@ impl Bird {
             up_vel: 0.0,
             collide: false,
             is_pressed: false,
+            rotation: 40.0,
         }
     }
 
-    pub fn update(&mut self, ev: &Event) {
+    pub fn update(&mut self, ev: &Event, args: &UpdateArgs) {
         // accelerated fall over time determined by gravity
         // increment x position to track position relative to other objects
         self.window_pos += 1.0;

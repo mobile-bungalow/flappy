@@ -4,12 +4,17 @@ pub mod pipe;
 pub mod tex_loader;
 
 extern crate graphics;
+extern crate opengl_graphics;
 extern crate piston;
+extern crate sprite;
 // piston reqs
 use piston_window::*;
 // user input
 use graphics::rectangle::square;
+use opengl_graphics::Texture;
 use piston::event_loop::{EventLoop, EventSettings, Events};
+use sprite::*;
+use std::rc::Rc;
 
 use vecmath::Vector2;
 
@@ -31,22 +36,23 @@ fn main() {
 
     let mut events = Events::new(EventSettings::new().ups(60).max_fps(60));
     let ds = graphics::DrawState::default();
+    let mut scene: sprite::Scene<opengl_graphics::Texture> = Scene::new();
+    let mut bird_sprite = Sprite::from_texture(Rc::new(am.bird_tex));
 
     let mut state = game_state::GameState::new(1.8, 0.0);
-
     while let Some(ev) = events.next(&mut window) {
         if let Some(p) = ev.press_args() {
             state.bird.key_event(p);
         }
 
-        if let Some(_) = ev.update_args() {
+        if let Some(update_arg) = ev.update_args() {
             // increment challenge as it runs
             //  xvel = ((score / 10) + 1) as f64;
             //  check and set pipe state
-            state.bird.update(&ev);
+            state.bird.update(&ev, &update_arg);
         }
 
-        if let Some(_) = ev.render_args() {
+        if let Some(r) = ev.render_args() {
             // increment stage movement
             state.stage_offset -= state.xvel;
             state.stage_offset %= WINDIMS[1];
@@ -68,6 +74,8 @@ fn main() {
                 // BIRD DRAWING CODE
                 let bimage = Image::new().rect(square(state.bird_pos, state.bird.ypos, 35.0));
                 bimage.draw(&am.bird_tex, &ds, c.transform, g);
+                println!("{}", state.bird.ypos);
+                println!("{}", state.bird.window_pos);
                 // BIRD DRAWING CODE END
             });
         }
