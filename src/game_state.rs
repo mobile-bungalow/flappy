@@ -28,7 +28,7 @@ impl GameState {
             ticks: 0,
             xvel: 1.8,
             stage_offset,
-            bird_pos: 300.0,
+            bird_pos: 340.0,
             score: 0,
             bird: bird::Bird::new(),
             pipe_deque: Vec::new(),
