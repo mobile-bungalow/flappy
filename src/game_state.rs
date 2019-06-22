@@ -14,7 +14,7 @@ pub struct GameState {
     //bird object
     pub bird: bird::Bird,
     //deque of pipe objects
-    pub pipe_deque: Vec<pipe::Pipe>,
+    //pub pipe_deque: Vec<pipe::Pipe>,
 }
 
 impl GameState {
@@ -22,10 +22,10 @@ impl GameState {
         GameState {
             xvel: xvel,
             stage_offset: stage_offset,
-            bird_pos: 40.0,
+            bird_pos: 350.0,
             score: 0,
             bird: bird::Bird::new(),
-            pipe_deque: Vec::new(),
+            //pipe_deque: Vec::new(),
         }
     }
 }

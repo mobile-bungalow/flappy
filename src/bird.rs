@@ -14,6 +14,8 @@ pub struct Bird {
     pub collide: bool,
     pub is_pressed: bool,
     pub rotation: f64,
+    // which image the bird is using, set by user
+    pub flapping: bool,
 }
 
 impl Bird {
@@ -25,10 +27,11 @@ impl Bird {
             collide: false,
             is_pressed: false,
             rotation: 0.0,
+            flapping: false,
         }
     }
 
-    pub fn update(&mut self, ev: &Event, args: &input::UpdateArgs) {
+    pub fn update(&mut self, _ev: &Event, _args: &input::UpdateArgs) {
         // accelerated fall over time determined by gravity
         // increment x position to track position relative to other objects
         self.window_pos += 1.0;
