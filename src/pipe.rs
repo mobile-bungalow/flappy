@@ -1,7 +1,7 @@
 extern crate rand;
 
 use rand::Rng;
-
+use std::collections::VecDeque;
 // Max challenge for pipes
 static MINDIFF: f64 = 30.0;
 static MAXDIFF: f64 = 60.0;
@@ -11,7 +11,7 @@ static MAXHEIGHT: f64 = 340.0;
 static MINHEIGHT: f64 = 10.0;
 
 static LATENT: u64 = 60;
-static SPAWNING: u64 = 360;
+static SPAWNING: u64 = 560;
 static MAINTENANCE: u64 = 980;
 
 pub struct Pipe {
@@ -43,26 +43,42 @@ impl Pipe {
 /// it pushes a pipe off the stack and generates a new one
 /// Yeah , I know this is ugly at the moment, there are better
 /// solutions
-pub fn update_pipe_state(pipe_deque: &mut Vec<Pipe>, dt: u64) {
+pub fn update_pipe_state(pipe_deque: &mut VecDeque<Pipe>, xvel: f64, dt: u64) {
     // latent stage
+
     if dt < LATENT {
         return;
     };
 
     if dt < SPAWNING {
-        if let Some(p) = pipe_deque.first() {
-            if dt - p.spawn_time > 50 {
+        if !pipe_deque.is_empty() {
+            if (dt % 101 / 100) > 0 {
                 // enough time has elapsed to spawn another pipe
                 // current tick, and where it should spawn off screen
-                pipe_deque.push(Pipe::new(850.0, dt));
+                pipe_deque.push_back(Pipe::new(850.0, dt));
             }
         } else {
             // current tick, and where it should spawn off screen
-            pipe_deque.push(Pipe::new(850.0, dt));
+            pipe_deque.push_back(Pipe::new(850.0, dt));
+        }
+        for i in 0..pipe_deque.len() {
+            pipe_deque[i].x -= xvel * 0.85;
         }
         return;
     };
 
-    if dt < MAINTENANCE {};
+    if dt < MAINTENANCE {
+        if let Some(p) = pipe_deque.pop_front() {
+            if p.x < -50.0 {
+                pipe_deque.pop_front();
+                pipe_deque.push_back(Pipe::new(850.0, dt));
+            }
+        }
+        for i in 0..pipe_deque.len() {
+            pipe_deque[i].x -= xvel * 0.85;
+        }
+        print!("{}\n", pipe_deque.len());
+        return;
+    };
 }
 

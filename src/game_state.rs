@@ -1,6 +1,6 @@
 use crate::bird;
 use crate::pipe;
-
+use std::collections::VecDeque;
 ///struct of important values in the state of the game
 pub struct GameState {
     // frames since the game started
@@ -16,7 +16,7 @@ pub struct GameState {
     //bird object
     pub bird: bird::Bird,
     //deque of pipe objects
-    pub pipe_deque: Vec<pipe::Pipe>,
+    pub pipe_deque: VecDeque<pipe::Pipe>,
     //is the game lost?
     pub lose: bool,
     pub paused: bool,
@@ -31,7 +31,7 @@ impl GameState {
             bird_pos: 340.0,
             score: 0,
             bird: bird::Bird::new(),
-            pipe_deque: Vec::new(),
+            pipe_deque: VecDeque::new(),
             lose: false,
             paused: false,
         }
