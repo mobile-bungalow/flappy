@@ -63,9 +63,11 @@ fn main() -> Result<(), u32> {
     bird.set_scale(0.08, 0.08); // so this is a bad hack, but in the future use a standard sprite size
 
     while let Some(ev) = events.next(&mut window) {
-
         if let Some(p) = ev.press_args() {
-            state.bird.key_event(p);
+            state.update(p);
+            if !state.paused {
+                state.bird.key_event(p);
+            }
             // if escape or something pressed, call reset.
         }
 
@@ -73,11 +75,14 @@ fn main() -> Result<(), u32> {
             // increment challenge as it runs
             //  xvel = ((score / 10) + 1) as f64;
             //  check and set pipe state
-            state.bird.update(&ev, &u);
+            if !state.paused {
+                state.bird.update(&ev, &u);
 
-            if state.bird.ypos > 310.0 || state.bird.collide {
-                state.lose();
+                if state.bird.ypos > 310.0 || state.bird.collide {
+                    state.lose();
+                }
             }
+
         }
 
         if let Some(_) = ev.render_args() {

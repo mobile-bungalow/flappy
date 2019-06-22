@@ -17,6 +17,7 @@ pub struct GameState {
     //pub pipe_deque: Vec<pipe::Pipe>,
     //is the game lost?
     pub lose: bool,
+    pub paused: bool,
 
 }
 
@@ -30,10 +31,31 @@ impl GameState {
             bird: bird::Bird::new(),
             //pipe_deque: Vec::new(),
             lose: false,
+            paused: false,
         }
     }
 
-    pub fn update(&mut self) {}
+
+    pub fn update(&mut self, button: input::Button) {
+        if let input::Button::Keyboard(key) = button {
+            match key {
+                input::Key::Escape => {
+                    if self.lose {
+                        self.reset();
+                    } else if self.paused == false {
+                        self.paused = true;
+                        self.pause();
+
+                    } else {
+                        self.xvel = 1.8;
+                        self.paused = false;
+                    }
+                }
+                _ => {}
+            }
+        }
+
+    }
 
 
     pub fn lose(&mut self) {
@@ -49,4 +71,8 @@ impl GameState {
         self.bird = bird::Bird::new();
     }
 
+
+    pub fn pause(&mut self) {
+        self.xvel = 0.0;
+    }
 }
