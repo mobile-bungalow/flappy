@@ -12,7 +12,7 @@ const MINHEIGHT: f64 = 350.0;
 
 const LATENT: u64 = 60;
 
-const PIPE_WIDTH: f64 = 40.0; //width form center of pipe sprite
+const PIPE_WIDTH: f64 = 50.0; //width form center of pipe sprite
 const PIPE_HEIGHT: f64 = 200.0; //height from the center of the pipe sprite
 
 pub struct Pipe {
