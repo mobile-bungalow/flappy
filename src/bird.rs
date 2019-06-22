@@ -39,7 +39,7 @@ impl Bird {
             self.up_vel -= G;
             self.ypos -= self.up_vel;
             if self.rotation < 90.0 {
-                self.rotation = self.up_vel * -10.5
+                self.rotation = self.up_vel * -11.0
             };
         }
     }
