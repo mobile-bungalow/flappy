@@ -45,11 +45,11 @@ pub fn update_pipe_state(
         return;
     };
 
-    for i in 0..pipe_deque.len() {
-        pipe_deque[i].x -= xvel;
+    for pipe in pipe_deque.iter_mut() {
+        pipe.x -= xvel;
         //if we are near a pipe, 340.0 is bird x pos
-        if (340.0 - pipe_deque[i].x).abs() < PIPE_WIDTH {
-            let p = &pipe_deque[i];
+        if (340.0 - pipe.x).abs() < PIPE_WIDTH {
+            let p = &pipe;
             // lower than pipe lip
             if bird.ypos + PIPE_HEIGHT >= p.height || bird.ypos <= p.height - p.gap - PIPE_HEIGHT {
                 bird.collide = true;

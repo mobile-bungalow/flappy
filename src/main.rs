@@ -99,7 +99,7 @@ fn main() -> Result<(), u32> {
             }
         }
 
-        if let Some(_) = ev.render_args() {
+        if ev.render_args().is_some() {
             // increment stage movement
             state.stage_offset -= state.xvel;
             state.stage_offset %= WINSIZE.width;
@@ -148,7 +148,6 @@ fn main() -> Result<(), u32> {
                 bird.draw(c.transform, g);
 
                 // BIRD DRAWING CODE END
-
 
                 //render start screen
                 if state.ticks < 125 && !state.bird.is_pressed {

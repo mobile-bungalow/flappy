@@ -1,5 +1,4 @@
-use crate::bird;
-use crate::pipe::Pipe;
+use crate::{bird, pipe::Pipe};
 use std::collections::VecDeque;
 ///struct of important values in the state of the game
 pub struct GameState {
@@ -24,7 +23,6 @@ pub struct GameState {
 
 impl GameState {
     pub fn new(_xvel: f64, stage_offset: f64) -> GameState {
-
         let pipe_vec: Vec<Pipe> = [0.0, 1.0, 2.0, 3.0, 4.0]
             .iter()
             .map(|x| Pipe::new(850.0 + 170.0 * x, 0))
@@ -44,12 +42,11 @@ impl GameState {
     }
 
     pub fn update(&mut self, button: input::Button) {
-
         if let input::Button::Keyboard(key) = button {
             if let input::Key::Escape = key {
                 if self.lose {
                     self.reset();
-                } else if self.paused == false {
+                } else if !self.paused {
                     self.paused = true;
                     self.pause();
                 } else {
