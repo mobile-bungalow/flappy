@@ -16,31 +16,30 @@ pub struct Bird {
     pub rotation: f64,
     // which image the bird is using, set by user
     pub flapping: bool,
-    pub hitbox: [f64 ;2],
+    pub hitbox: [f64; 2],
 }
 
 impl Bird {
     pub fn new() -> Bird {
         Bird {
-            window_pos: 40.0,
+            window_pos: 340.0,
             ypos: 150.0,
             up_vel: 0.0,
             collide: false,
             is_pressed: false,
             rotation: 0.0,
             flapping: false,
-            hitbox: [10.0 ; 2],
+            hitbox: [10.0; 2],
         }
     }
 
     pub fn update(&mut self, _ev: &Event, _args: input::UpdateArgs) {
         // increment x position to track position relative to other objects
-        self.window_pos += 1.0;
         // decrement y position to signify falling
         if self.is_pressed && !self.collide {
             self.up_vel -= G;
             self.ypos -= self.up_vel;
-                self.rotation = self.up_vel * -11.0;
+            self.rotation = self.up_vel * -9.0;
         }
     }
 

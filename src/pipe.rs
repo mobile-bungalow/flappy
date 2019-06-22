@@ -20,6 +20,7 @@ pub struct Pipe {
     pub gap: f64,    // the gap height in screen units
     pub height: f64, // the height of the bottom pipe
     pub x: f64,      // the x offset of the pipe
+    pub counted: bool,
 }
 
 impl Pipe {
@@ -30,6 +31,7 @@ impl Pipe {
             gap: rng.gen_range(MINDIFF, MAXDIFF),
             height: rng.gen_range(MINHEIGHT, MAXHEIGHT),
             x: start,
+            counted: false,
         }
     }
 }
@@ -49,7 +51,7 @@ pub fn update_pipe_state(
         pipe_deque[i].x -= xvel;
         //if we are near a pipe, 340.0 is bird x pos
         if (340.0 - pipe_deque[i].x).abs() < PIPE_WIDTH {
-            let p = &pipe_deque[i];
+            let p = &mut pipe_deque[i];
             // lower than pipe lip
             if bird.ypos + PIPE_HEIGHT >= p.height || bird.ypos <= p.height - p.gap - PIPE_HEIGHT {
                 bird.collide = true;

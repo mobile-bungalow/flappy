@@ -93,9 +93,11 @@ fn main() -> Result<(), u32> {
                     &mut state.bird,
                     &mut state.score,
                 );
+
                 if state.bird.ypos > 283.0 || state.bird.collide {
                     state.lose();
                 }
+                state.update_score();
             }
         }
 
@@ -114,41 +116,43 @@ fn main() -> Result<(), u32> {
                     let j = Image::new().rect(square(x_coord, 0.0, WINSIZE.width));
                     // call makeup : image itself, context mutations, graphics
                     j.draw(&am.bg_tex, &ds, c.transform, g);
-                }
 
-                for pipe_idx in 0..state.pipe_deque.len() {
-                    let p = &mut state.pipe_deque[pipe_idx];
-                    pipe.set_position(p.x, p.height);
-                    reverse.set_position(p.x, p.height - p.gap - 400.0);
-                    pipe.draw(c.transform, g);
-                    reverse.draw(c.transform, g);
+                    for pipe_idx in 0..state.pipe_deque.len() {
+                        let p = &mut state.pipe_deque[pipe_idx];
+                        pipe.set_position(p.x, p.height);
+                        reverse.set_position(p.x, p.height - p.gap - 400.0);
+                        pipe.draw(c.transform, g);
+                        reverse.draw(c.transform, g);
+                    }
+
+                    // BACKGROUND PARALLAX CODE END
+
+                    // BIRD DRAWING CODE
+                    bird.set_position(state.bird_pos, state.bird.ypos);
+                    bird.set_rotation(state.bird.rotation);
+                    // incorrect state upward
+                    if !state.bird.flapping && state.bird.rotation < 0.0 {
+                        bird.set_texture(unflap_tex.clone());
+                        state.bird.flapping = true;
+                    }
+                    //incorrect state downward
+                    if state.bird.flapping && state.bird.rotation > 0.0 {
+                        bird.set_texture(flap_tex.clone());
+                        state.bird.flapping = false;
+                    }
+                    bird.draw(c.transform, g);
+
+                    // BIRD DRAWING CODE END
                 }
 
                 //render ground separately
+                //ground has to render after bird bc bird falls behind ground
                 for image_idx in 0..3 {
                     let jitter_offset = f64::from(image_idx);
                     let x_coord = (jitter_offset * 350.0) + state.stage_offset - jitter_offset;
                     let j = Image::new().rect(square(x_coord, 1500.0, WINSIZE.width));
                     j.draw(&am.ground_tex, &ds, c.transform.scale(1.3, 0.2), g);
                 }
-                // BACKGROUND PARALLAX CODE END
-                // BIRD DRAWING CODE
-                bird.set_position(state.bird_pos, state.bird.ypos);
-                bird.set_rotation(state.bird.rotation);
-                // incorrect state upward
-                if !state.bird.flapping && state.bird.rotation < 0.0 {
-                    bird.set_texture(unflap_tex.clone());
-                    state.bird.flapping = true;
-                }
-                //incorrect state downward
-                if state.bird.flapping && state.bird.rotation > 0.0 {
-                    bird.set_texture(flap_tex.clone());
-                    state.bird.flapping = false;
-                }
-                bird.draw(c.transform, g);
-
-                // BIRD DRAWING CODE END
-
 
                 //render start screen
                 if state.ticks < 125 && !state.bird.is_pressed {

@@ -24,7 +24,6 @@ pub struct GameState {
 
 impl GameState {
     pub fn new(_xvel: f64, stage_offset: f64) -> GameState {
-
         let pipe_vec: Vec<Pipe> = [0.0, 1.0, 2.0, 3.0, 4.0]
             .iter()
             .map(|x| Pipe::new(850.0 + 170.0 * x, 0))
@@ -32,7 +31,7 @@ impl GameState {
 
         GameState {
             ticks: 0,
-            xvel: 1.8,
+            xvel: 1.0,
             stage_offset,
             bird_pos: 340.0,
             score: 0,
@@ -44,7 +43,6 @@ impl GameState {
     }
 
     pub fn update(&mut self, button: input::Button) {
-
         if let input::Button::Keyboard(key) = button {
             if let input::Key::Escape = key {
                 if self.lose {
@@ -58,6 +56,17 @@ impl GameState {
                 }
             }
         }
+    }
+
+    pub fn update_score(&mut self) {
+        for i in 0..self.pipe_deque.len() as usize {
+            let mut pipe = &mut self.pipe_deque[i];
+            if (340.0 - pipe.x) > 40.0 && !self.bird.collide && !pipe.counted {
+                self.score += 1;
+                pipe.counted = true
+            }
+        }
+        println!("{}", self.score)
     }
 
     pub fn lose(&mut self) {
