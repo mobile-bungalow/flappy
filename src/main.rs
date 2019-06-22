@@ -80,7 +80,7 @@ fn main() -> Result<(), u32> {
                 state.ticks += 1;
                 state.bird.update(&ev, u);
                 pipe::update_pipe_state(&mut state.pipe_deque, state.ticks);
-                if state.bird.ypos > 285.0 || state.bird.collide {
+                if state.bird.ypos > 283.0 || state.bird.collide {
                     state.lose();
                 }
             }
@@ -123,6 +123,17 @@ fn main() -> Result<(), u32> {
 
                 bird.draw(c.transform, g);
 
+                // BIRD DRAWING CODE END
+
+                //render ground separately
+                for image_idx in 0..3 {
+                    let jitter_offset = f64::from(image_idx);
+                    let x_coord = (jitter_offset * 350.0) + state.stage_offset - jitter_offset;
+                    let j = Image::new().rect(square(x_coord, 1500.0, WINSIZE.width));
+                    j.draw(&am.ground_tex, &ds, c.transform.scale(1.3, 0.2), g);
+                }
+
+                //render start screen
                 if state.ticks < 125 && !state.bird.is_pressed {
                     let start = Image::new().rect(square(
                         (WINSIZE.width - 75.0 * 2.6) / 2.0,
@@ -132,7 +143,7 @@ fn main() -> Result<(), u32> {
                     start.draw(&am.start_tex, &ds, c.transform.scale(3.0, 1.0), g);
                 }
 
-                // BIRD DRAWING CODE END
+                //render game over
                 if state.lose {
                     let loss = Image::new().rect(square(
                         (WINSIZE.width - 75.0 * 2.5) / 2.0,
