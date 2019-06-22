@@ -101,7 +101,7 @@ fn main() -> Result<(), u32> {
             }
         }
 
-        if let Some(_) = ev.render_args() {
+        if ev.render_args().is_some() {
             // increment stage movement
             state.stage_offset -= state.xvel;
             state.stage_offset %= WINSIZE.width;

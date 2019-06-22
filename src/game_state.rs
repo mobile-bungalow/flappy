@@ -1,5 +1,4 @@
-use crate::bird;
-use crate::pipe::Pipe;
+use crate::{bird, pipe::Pipe};
 use std::collections::VecDeque;
 ///struct of important values in the state of the game
 pub struct GameState {
@@ -47,7 +46,7 @@ impl GameState {
             if let input::Key::Escape = key {
                 if self.lose {
                     self.reset();
-                } else if self.paused == false {
+                } else if !self.paused {
                     self.paused = true;
                     self.pause();
                 } else {
