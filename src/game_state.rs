@@ -1,5 +1,5 @@
 use crate::bird;
-use crate::pipe;
+use crate::pipe::Pipe;
 use std::collections::VecDeque;
 ///struct of important values in the state of the game
 pub struct GameState {
@@ -16,7 +16,7 @@ pub struct GameState {
     //bird object
     pub bird: bird::Bird,
     //deque of pipe objects
-    pub pipe_deque: VecDeque<pipe::Pipe>,
+    pub pipe_deque: VecDeque<Pipe>,
     //is the game lost?
     pub lose: bool,
     pub paused: bool,
@@ -24,6 +24,12 @@ pub struct GameState {
 
 impl GameState {
     pub fn new(_xvel: f64, stage_offset: f64) -> GameState {
+
+        let pipe_vec: Vec<Pipe> = [0.0, 1.0, 2.0, 3.0, 4.0]
+            .iter()
+            .map(|x| Pipe::new(850.0 + 170.0 * x, 0))
+            .collect();
+
         GameState {
             ticks: 0,
             xvel: 1.8,
@@ -31,7 +37,7 @@ impl GameState {
             bird_pos: 340.0,
             score: 0,
             bird: bird::Bird::new(),
-            pipe_deque: VecDeque::new(),
+            pipe_deque: VecDeque::from(pipe_vec),
             lose: false,
             paused: false,
         }
@@ -66,7 +72,11 @@ impl GameState {
         self.score = 0;
         self.xvel = 1.8;
         self.bird = bird::Bird::new();
-        self.pipe_deque.clear();
+        let pipe_vec: Vec<Pipe> = [0.0, 1.0, 2.0, 3.0, 4.0]
+            .iter()
+            .map(|x| Pipe::new(850.0 + 170.0 * x, 0))
+            .collect();
+        self.pipe_deque = VecDeque::from(pipe_vec);
     }
 
     pub fn pause(&mut self) {

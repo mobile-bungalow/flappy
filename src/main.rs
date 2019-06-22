@@ -62,9 +62,14 @@ fn main() -> Result<(), u32> {
     let pipe_tex = Rc::new(am.pipe_tex.clone());
 
     let mut pipe = sprite::Sprite::from_texture(pipe_tex.clone());
+    let mut reverse = sprite::Sprite::from_texture(pipe_tex.clone());
     let mut bird = sprite::Sprite::from_texture(unflap_tex.clone());
-    bird.set_scale(0.08, 0.08); // so this is a bad hack, but in the future use a standard sprite size
-    pipe.set_scale(0.5, 0.5); // or we could do the math instead of guessing
+
+    bird.set_scale(0.08, 0.08);
+    pipe.set_scale(0.5, 0.5);
+    reverse.set_scale(0.5, 0.5);
+    reverse.set_rotation(180.0);
+
     while let Some(ev) = events.next(&mut window) {
         if let Some(p) = ev.press_args() {
             state.update(p);
@@ -88,7 +93,7 @@ fn main() -> Result<(), u32> {
             }
         }
 
-        if let Some(e) = ev.render_args() {
+        if let Some(_) = ev.render_args() {
             // increment stage movement
             state.stage_offset -= state.xvel;
             state.stage_offset %= WINSIZE.width;
@@ -96,11 +101,6 @@ fn main() -> Result<(), u32> {
                 // clear bg
                 clear([1.0; 4], g);
                 // BACKGROUND PARALLAX CODE BEGIN
-                // Background Section
-                // due to math, there are always three images
-                // render pipes, modify them too
-
-
                 for image_idx in 0..3 {
                     // prevents image seams
                     let jitter_offset = f64::from(image_idx);
@@ -113,7 +113,17 @@ fn main() -> Result<(), u32> {
                 for pipe_idx in 0..state.pipe_deque.len() {
                     let p = &mut state.pipe_deque[pipe_idx];
                     pipe.set_position(p.x, p.height);
+                    reverse.set_position(p.x, p.height - p.gap - 400.0);
                     pipe.draw(c.transform, g);
+                    reverse.draw(c.transform, g);
+                }
+
+                //render ground separately
+                for image_idx in 0..3 {
+                    let jitter_offset = f64::from(image_idx);
+                    let x_coord = (jitter_offset * 350.0) + state.stage_offset - jitter_offset;
+                    let j = Image::new().rect(square(x_coord, 1500.0, WINSIZE.width));
+                    j.draw(&am.ground_tex, &ds, c.transform.scale(1.3, 0.2), g);
                 }
                 // BACKGROUND PARALLAX CODE END
                 // BIRD DRAWING CODE
@@ -132,14 +142,6 @@ fn main() -> Result<(), u32> {
                 bird.draw(c.transform, g);
 
                 // BIRD DRAWING CODE END
-
-                //render ground separately
-                for image_idx in 0..3 {
-                    let jitter_offset = f64::from(image_idx);
-                    let x_coord = (jitter_offset * 350.0) + state.stage_offset - jitter_offset;
-                    let j = Image::new().rect(square(x_coord, 1500.0, WINSIZE.width));
-                    j.draw(&am.ground_tex, &ds, c.transform.scale(1.3, 0.2), g);
-                }
 
 
                 //render start screen

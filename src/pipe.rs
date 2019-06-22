@@ -4,18 +4,14 @@ use ncollide2d::shape::Cuboid;
 use rand::Rng;
 use std::collections::VecDeque;
 // Max challenge for pipes
-static MINDIFF: f64 = 30.0;
-static MAXDIFF: f64 = 60.0;
+static MINDIFF: f64 = 70.0;
+static MAXDIFF: f64 = 150.0;
 
 // range for the gap
 static MAXHEIGHT: f64 = 450.0;
 static MINHEIGHT: f64 = 250.0;
 
 static LATENT: u64 = 60;
-static SPAWNING: u64 = 560;
-
-//100 frame spawn interval
-static SPAWN_INTERVAL: u64 = 100;
 
 pub struct Pipe {
     pub spawn_time: u64,
@@ -26,10 +22,6 @@ pub struct Pipe {
 }
 
 impl Pipe {
-    /// generate a new pipe with difficulty
-    /// based off of ther current speed
-    /// xvel is the current challenge, start is the spawn position,
-    /// spawn time is the time the pipe was born.
     pub fn new(start: f64, spawn_time: u64) -> Self {
         let mut rng = rand::thread_rng();
         let hit_boxes = [
@@ -54,33 +46,19 @@ impl Pipe {
 /// solutions
 pub fn update_pipe_state(pipe_deque: &mut VecDeque<Pipe>, xvel: f64, dt: u64) {
     // latent stage
-    for i in 0..pipe_deque.len() {
-        pipe_deque[i].x -= xvel * 0.9;
-    }
 
     if dt < LATENT {
         return;
     };
 
-    if dt < SPAWNING {
-        if let Some(p) = pipe_deque.get(0) {
-            if ((dt - p.spawn_time) % (SPAWN_INTERVAL + 1) / SPAWN_INTERVAL) > 0 {
-                // enough time has elapsed to spawn another pipe
-                // current tick, and where it should spawn off screen
-                pipe_deque.push_back(Pipe::new(850.0, dt));
-            }
-        } else {
-            // current tick, and where it should spawn off screen
-            pipe_deque.push_back(Pipe::new(850.0, dt));
-        }
-        return;
-
-    };
+    for i in 0..pipe_deque.len() {
+        pipe_deque[i].x -= xvel * 0.9;
+    }
 
     if let Some(p) = pipe_deque.get(0) {
         if p.x < -50.0 {
             pipe_deque.pop_front();
-            pipe_deque.push_back(Pipe::new(850.0, dt));
+            pipe_deque.push_back(Pipe::new(850.0, 0));
         }
     }
 
