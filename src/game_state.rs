@@ -3,6 +3,9 @@ use crate::pipe;
 
 ///struct of important values in the state of the game
 pub struct GameState {
+
+    // frames since the game started
+    pub ticks: u64,
     //velocity of the screen
     pub xvel: f64,
     //offset for tiling images
@@ -14,7 +17,7 @@ pub struct GameState {
     //bird object
     pub bird: bird::Bird,
     //deque of pipe objects
-    //pub pipe_deque: Vec<pipe::Pipe>,
+    pub pipe_deque: Vec<pipe::Pipe>,
     //is the game lost?
     pub lose: bool,
     pub paused: bool,
@@ -24,12 +27,13 @@ pub struct GameState {
 impl GameState {
     pub fn new(xvel: f64, stage_offset: f64) -> GameState {
         GameState {
+            ticks: 0,
             xvel: 1.8,
             stage_offset: stage_offset,
             bird_pos: 350.0,
             score: 0,
             bird: bird::Bird::new(),
-            //pipe_deque: Vec::new(),
+            pipe_deque: Vec::new(),
             lose: false,
             paused: false,
         }
@@ -65,6 +69,7 @@ impl GameState {
     }
 
     pub fn reset(&mut self) {
+        self.ticks = 0;
         self.lose = false;
         self.score = 0;
         self.xvel = 1.8;

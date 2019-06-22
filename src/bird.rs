@@ -52,7 +52,9 @@ impl Bird {
             match key {
                 //if the key pressed is a space, bird jumps
                 input::Key::Space => {
-                    if self.collide {return;}
+                    if self.collide {
+                        return;
+                    }
                     self.up_vel = 4.0;
                     self.is_pressed = true;
                 }
