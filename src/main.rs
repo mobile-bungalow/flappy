@@ -62,7 +62,7 @@ fn main() -> Result<(), u32> {
     let mut unflap_tex = Rc::new(am.bird_tex.clone());
     let mut flap_tex = Rc::new(am.bird_up_tex.clone());
 
-    let mut bird = sprite::Sprite::from_texture(unflap_tex);
+    let mut bird = sprite::Sprite::from_texture(unflap_tex.clone());
     bird.set_scale(0.08, 0.08); // so this is a bad hack, but in the future use a standard sprite size
 
     while let Some(ev) = events.next(&mut window) {
@@ -83,13 +83,13 @@ fn main() -> Result<(), u32> {
                 state.ticks += 1;
                 state.bird.update(&ev, &u);
                 pipe::update_pipe_state(&mut state.pipe_deque, state.ticks);
-                if state.bird.ypos > 275.0 || state.bird.collide {
+                if state.bird.ypos > 300.0 || state.bird.collide {
                     state.lose();
                 }
             }
 
         }
- 
+
         if let Some(_) = ev.render_args() {
             // increment stage movement
             state.stage_offset -= state.xvel;
@@ -100,6 +100,7 @@ fn main() -> Result<(), u32> {
                 // BACKGROUND PARALLAX CODE BEGIN
                 // Background Section
                 // due to math, there are always three images
+
                 for image_idx in 0..3 {
                     // prevents image seams
                     let jitter_offset = image_idx as f64;
@@ -108,6 +109,7 @@ fn main() -> Result<(), u32> {
                     // call makeup : image itself, context mutations, graphics
                     j.draw(&am.bg_tex, &ds, c.transform, g);
                 }
+
                 // BACKGROUND PARALLAX CODE END
                 // BIRD DRAWING CODE
                 bird.set_position(state.bird_pos, state.bird.ypos);
