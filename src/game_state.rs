@@ -38,6 +38,7 @@ impl GameState {
     }
 
     pub fn update(&mut self, button: input::Button) {
+
         if let input::Button::Keyboard(key) = button {
             if let input::Key::Escape = key {
                 if self.lose {
@@ -65,6 +66,7 @@ impl GameState {
         self.score = 0;
         self.xvel = 1.8;
         self.bird = bird::Bird::new();
+        self.pipe_deque.clear();
     }
 
     pub fn pause(&mut self) {

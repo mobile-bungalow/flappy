@@ -1,5 +1,6 @@
 extern crate rand;
-
+use ncollide2d::math::Vector;
+use ncollide2d::shape::Cuboid;
 use rand::Rng;
 use std::collections::VecDeque;
 // Max challenge for pipes
@@ -7,18 +8,21 @@ static MINDIFF: f64 = 30.0;
 static MAXDIFF: f64 = 60.0;
 
 // range for the gap
-static MAXHEIGHT: f64 = 340.0;
-static MINHEIGHT: f64 = 10.0;
+static MAXHEIGHT: f64 = 450.0;
+static MINHEIGHT: f64 = 250.0;
 
 static LATENT: u64 = 60;
 static SPAWNING: u64 = 560;
-static MAINTENANCE: u64 = 980;
+
+//100 frame spawn interval
+static SPAWN_INTERVAL: u64 = 100;
 
 pub struct Pipe {
-    spawn_time: u64,
-    gap: f64,    // the gap height in screen units
-    height: f64, // the height of the bottom pipe
-    x: f64,      // the x offset of the pipe
+    pub spawn_time: u64,
+    pub gap: f64,    // the gap height in screen units
+    pub height: f64, // the height of the bottom pipe
+    pub x: f64,      // the x offset of the pipe
+    pub hit_boxes: [Cuboid<f64>; 2],
 }
 
 impl Pipe {
@@ -28,11 +32,16 @@ impl Pipe {
     /// spawn time is the time the pipe was born.
     pub fn new(start: f64, spawn_time: u64) -> Self {
         let mut rng = rand::thread_rng();
+        let hit_boxes = [
+            Cuboid::new(Vector::new(50.0, 350.0)),
+            Cuboid::new(Vector::new(50.0, 350.0)),
+        ];
         Pipe {
             spawn_time,
             gap: rng.gen_range(MINDIFF, MAXDIFF),
             height: rng.gen_range(MINHEIGHT, MAXHEIGHT),
             x: start,
+            hit_boxes,
         }
     }
 
@@ -45,14 +54,17 @@ impl Pipe {
 /// solutions
 pub fn update_pipe_state(pipe_deque: &mut VecDeque<Pipe>, xvel: f64, dt: u64) {
     // latent stage
+    for i in 0..pipe_deque.len() {
+        pipe_deque[i].x -= xvel * 0.9;
+    }
 
     if dt < LATENT {
         return;
     };
 
     if dt < SPAWNING {
-        if !pipe_deque.is_empty() {
-            if (dt % 101 / 100) > 0 {
+        if let Some(p) = pipe_deque.get(0) {
+            if ((dt - p.spawn_time) % (SPAWN_INTERVAL + 1) / SPAWN_INTERVAL) > 0 {
                 // enough time has elapsed to spawn another pipe
                 // current tick, and where it should spawn off screen
                 pipe_deque.push_back(Pipe::new(850.0, dt));
@@ -61,24 +73,16 @@ pub fn update_pipe_state(pipe_deque: &mut VecDeque<Pipe>, xvel: f64, dt: u64) {
             // current tick, and where it should spawn off screen
             pipe_deque.push_back(Pipe::new(850.0, dt));
         }
-        for i in 0..pipe_deque.len() {
-            pipe_deque[i].x -= xvel * 0.85;
-        }
         return;
+
     };
 
-    if dt < MAINTENANCE {
-        if let Some(p) = pipe_deque.pop_front() {
-            if p.x < -50.0 {
-                pipe_deque.pop_front();
-                pipe_deque.push_back(Pipe::new(850.0, dt));
-            }
+    if let Some(p) = pipe_deque.get(0) {
+        if p.x < -50.0 {
+            pipe_deque.pop_front();
+            pipe_deque.push_back(Pipe::new(850.0, dt));
         }
-        for i in 0..pipe_deque.len() {
-            pipe_deque[i].x -= xvel * 0.85;
-        }
-        print!("{}\n", pipe_deque.len());
-        return;
-    };
+    }
+
 }
 

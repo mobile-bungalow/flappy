@@ -59,10 +59,12 @@ fn main() -> Result<(), u32> {
     // the bird flapping up texture, for closure reasons
     let unflap_tex = Rc::new(am.bird_tex.clone());
     let flap_tex = Rc::new(am.bird_up_tex.clone());
+    let pipe_tex = Rc::new(am.pipe_tex.clone());
 
+    let mut pipe = sprite::Sprite::from_texture(pipe_tex.clone());
     let mut bird = sprite::Sprite::from_texture(unflap_tex.clone());
     bird.set_scale(0.08, 0.08); // so this is a bad hack, but in the future use a standard sprite size
-
+    pipe.set_scale(0.5, 0.5); // or we could do the math instead of guessing
     while let Some(ev) = events.next(&mut window) {
         if let Some(p) = ev.press_args() {
             state.update(p);
@@ -76,7 +78,7 @@ fn main() -> Result<(), u32> {
             // increment challenge as it runs
             //state.xvel = (state.ticks as f64 / 3000.0) + 1.0;
             //  check and set pipe state
-            if !state.paused {
+            if !state.paused && state.bird.is_pressed {
                 state.ticks += 1;
                 state.bird.update(&ev, u);
                 pipe::update_pipe_state(&mut state.pipe_deque, state.xvel, state.ticks);
@@ -96,6 +98,8 @@ fn main() -> Result<(), u32> {
                 // BACKGROUND PARALLAX CODE BEGIN
                 // Background Section
                 // due to math, there are always three images
+                // render pipes, modify them too
+
 
                 for image_idx in 0..3 {
                     // prevents image seams
@@ -106,6 +110,11 @@ fn main() -> Result<(), u32> {
                     j.draw(&am.bg_tex, &ds, c.transform, g);
                 }
 
+                for pipe_idx in 0..state.pipe_deque.len() {
+                    let p = &mut state.pipe_deque[pipe_idx];
+                    pipe.set_position(p.x, p.height);
+                    pipe.draw(c.transform, g);
+                }
                 // BACKGROUND PARALLAX CODE END
                 // BIRD DRAWING CODE
                 bird.set_position(state.bird_pos, state.bird.ypos);
@@ -120,7 +129,6 @@ fn main() -> Result<(), u32> {
                     bird.set_texture(flap_tex.clone());
                     state.bird.flapping = false;
                 }
-
                 bird.draw(c.transform, g);
 
                 // BIRD DRAWING CODE END
@@ -132,6 +140,7 @@ fn main() -> Result<(), u32> {
                     let j = Image::new().rect(square(x_coord, 1500.0, WINSIZE.width));
                     j.draw(&am.ground_tex, &ds, c.transform.scale(1.3, 0.2), g);
                 }
+
 
                 //render start screen
                 if state.ticks < 125 && !state.bird.is_pressed {
