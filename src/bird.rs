@@ -36,25 +36,23 @@ impl Bird {
         self.window_pos += 1.0;
         // decrement y position to signify falling
         if self.is_pressed && !self.collide {
-                self.up_vel -= G;
-                self.ypos -= self.up_vel;
-                self.rotation = self.up_vel * -8.0;
-            }
-           
+            self.up_vel -= G;
+            self.ypos -= self.up_vel;
+            if self.rotation < 90.0 {
+                self.rotation = self.up_vel * -10.5
+            };
+        }
     }
 
     ///behaviour determined by key presses
     pub fn key_event(&mut self, button: input::Button) {
-
-
-
         if let input::Button::Keyboard(key) = button {
             if let input::Key::Space = key {
-                    if self.collide {
-                        return;
-                    }
-                    self.up_vel = 4.0;
-                    self.is_pressed = true;
+                if self.collide {
+                    return;
+                }
+                self.up_vel = 4.0;
+                self.is_pressed = true;
             }
         }
     }
