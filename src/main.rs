@@ -80,7 +80,7 @@ fn main() -> Result<(), u32> {
                 state.ticks += 1;
                 state.bird.update(&ev, u);
                 pipe::update_pipe_state(&mut state.pipe_deque, state.ticks);
-                if state.bird.ypos > 300.0 || state.bird.collide {
+                if state.bird.ypos > 285.0 || state.bird.collide {
                     state.lose();
                 }
             }
