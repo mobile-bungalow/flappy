@@ -36,7 +36,7 @@ static WINSIZE: Size = Size {
     width: 350.0,
 };
 
-fn main() {
+fn main() -> Result<(), u32> {
     let mut window: PistonWindow =
         WindowSettings::new("Not FlappyBird", (WINSIZE.height, WINSIZE.width))
             .graphics_api(OpenGL::V3_2)
@@ -134,4 +134,5 @@ fn main() {
             });
         }
     }
+    Ok(())
 }

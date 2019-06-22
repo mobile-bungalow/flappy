@@ -3,7 +3,6 @@ use crate::pipe;
 
 ///struct of important values in the state of the game
 pub struct GameState {
-
     // frames since the game started
     pub ticks: u64,
     //velocity of the screen
@@ -21,7 +20,6 @@ pub struct GameState {
     //is the game lost?
     pub lose: bool,
     pub paused: bool,
-
 }
 
 impl GameState {
@@ -30,7 +28,7 @@ impl GameState {
             ticks: 0,
             xvel: 1.8,
             stage_offset,
-            bird_pos: 350.0,
+            bird_pos: 300.0,
             score: 0,
             bird: bird::Bird::new(),
             pipe_deque: Vec::new(),
@@ -39,25 +37,21 @@ impl GameState {
         }
     }
 
-
     pub fn update(&mut self, button: input::Button) {
         if let input::Button::Keyboard(key) = button {
             if let input::Key::Escape = key {
-                    if self.lose {
-                        self.reset();
-                    } else if self.paused == false {
-                        self.paused = true;
-                        self.pause();
-
-                    } else {
-                        self.xvel = 1.8;
-                        self.paused = false;
-                    }
+                if self.lose {
+                    self.reset();
+                } else if self.paused == false {
+                    self.paused = true;
+                    self.pause();
+                } else {
+                    self.xvel = 1.8;
+                    self.paused = false;
                 }
+            }
         }
-
     }
-
 
     pub fn lose(&mut self) {
         self.lose = true;
@@ -72,7 +66,6 @@ impl GameState {
         self.xvel = 1.8;
         self.bird = bird::Bird::new();
     }
-
 
     pub fn pause(&mut self) {
         self.xvel = 0.0;

@@ -6,7 +6,7 @@ static TEXLIST: [&str; 6] = [
     "assets/seg.png",
     "assets/tip.png",
     "assets/bird_up.png",
-    "assets/game_over.png",
+    "assets/gameover.png",
 ];
 
 /// The map of all textures that OPengl needs in order to
