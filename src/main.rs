@@ -59,8 +59,8 @@ fn main() -> Result<(), u32> {
     let am: tex_loader::AssetMap = tex_loader::AssetMap::load_assets(&mut texture_context);
 
     // the bird flapping up texture, for closure reasons
-    let mut unflap_tex = Rc::new(am.bird_tex.clone());
-    let mut flap_tex = Rc::new(am.bird_up_tex.clone());
+    let unflap_tex = Rc::new(am.bird_tex.clone());
+    let flap_tex = Rc::new(am.bird_up_tex.clone());
 
     let mut bird = sprite::Sprite::from_texture(unflap_tex.clone());
     bird.set_scale(0.08, 0.08); // so this is a bad hack, but in the future use a standard sprite size
@@ -77,11 +77,11 @@ fn main() -> Result<(), u32> {
 
         if let Some(u) = ev.update_args() {
             // increment challenge as it runs
-            //  xvel = ((score / 10) + 1) as f64;
+            //state.xvel = (state.ticks as f64 / 3000.0) + 1.0;
             //  check and set pipe state
             if !state.paused {
                 state.ticks += 1;
-                state.bird.update(&ev, &u);
+                state.bird.update(&ev, u);
                 pipe::update_pipe_state(&mut state.pipe_deque, state.ticks);
                 if state.bird.ypos > 300.0 || state.bird.collide {
                     state.lose();
@@ -90,7 +90,7 @@ fn main() -> Result<(), u32> {
 
         }
 
-        if let Some(_) = ev.render_args() {
+        if ev.render_args().is_some() {
             // increment stage movement
             state.stage_offset -= state.xvel;
             state.stage_offset %= WINSIZE.width;
@@ -103,7 +103,7 @@ fn main() -> Result<(), u32> {
 
                 for image_idx in 0..3 {
                     // prevents image seams
-                    let jitter_offset = image_idx as f64;
+                    let jitter_offset = f64::from(image_idx);
                     let x_coord = (jitter_offset * 350.0) + state.stage_offset - jitter_offset;
                     let j = Image::new().rect(square(x_coord, 0.0, WINSIZE.width));
                     // call makeup : image itself, context mutations, graphics

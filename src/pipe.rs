@@ -1,4 +1,3 @@
-
 extern crate rand;
 
 use rand::Rng;
@@ -27,10 +26,10 @@ impl Pipe {
     /// based off of ther current speed
     /// xvel is the current challenge, start is the spawn position,
     /// spawn time is the time the pipe was born.
-    pub fn new(xvel: f64, start: f64, spawn_time: u64) -> Self {
+    pub fn new(_xvel: f64, start: f64, spawn_time: u64) -> Self {
         let mut rng = rand::thread_rng();
         Pipe {
-            spawn_time: spawn_time,
+            spawn_time,
             gap: rng.gen_range(MAXDIFF, MINDIFF),
             height: rng.gen_range(MAXHEIGHT, MINHEIGHT),
             x: start,
@@ -42,7 +41,7 @@ impl Pipe {
 /// Takes a list of pipes, and delta time since the
 /// game began, every N seconds after a certain time
 /// it pushes a pipe off the stack and generates a new one
-pub fn update_pipe_state(pipe_deque: &mut Vec<Pipe>, dt: u64) {
+pub fn update_pipe_state(_pipe_deque: &mut Vec<Pipe>, dt: u64) {
     // latent stage
     if dt < LATENT {
         return;

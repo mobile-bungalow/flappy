@@ -1,7 +1,5 @@
 use gfx_graphics::*;
 
-use std::rc::Rc; // for sprites
-
 static TEXLIST: [&str; 5] = [
     "assets/bg.png",
     "assets/bird.png",

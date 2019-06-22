@@ -31,34 +31,30 @@ impl Bird {
         }
     }
 
-    pub fn update(&mut self, _ev: &Event, _args: &input::UpdateArgs) {
+    pub fn update(&mut self, _ev: &Event, _args: input::UpdateArgs) {
         // increment x position to track position relative to other objects
         self.window_pos += 1.0;
         // decrement y position to signify falling
-        match self.is_pressed && !self.collide {
-            true => {
-                // accelerated fall over time determined by gravity
+        if self.is_pressed && !self.collide {
                 self.up_vel -= G;
                 self.ypos -= self.up_vel;
                 self.rotation = self.up_vel * -8.0;
             }
-            false => {}
-        }
+           
     }
 
     ///behaviour determined by key presses
     pub fn key_event(&mut self, button: input::Button) {
+
+
+
         if let input::Button::Keyboard(key) = button {
-            match key {
-                //if the key pressed is a space, bird jumps
-                input::Key::Space => {
+            if let input::Key::Space = key {
                     if self.collide {
                         return;
                     }
                     self.up_vel = 4.0;
                     self.is_pressed = true;
-                }
-                _ => {}
             }
         }
     }

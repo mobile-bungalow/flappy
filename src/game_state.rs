@@ -25,11 +25,11 @@ pub struct GameState {
 }
 
 impl GameState {
-    pub fn new(xvel: f64, stage_offset: f64) -> GameState {
+    pub fn new(_xvel: f64, stage_offset: f64) -> GameState {
         GameState {
             ticks: 0,
             xvel: 1.8,
-            stage_offset: stage_offset,
+            stage_offset,
             bird_pos: 350.0,
             score: 0,
             bird: bird::Bird::new(),
@@ -42,8 +42,7 @@ impl GameState {
 
     pub fn update(&mut self, button: input::Button) {
         if let input::Button::Keyboard(key) = button {
-            match key {
-                input::Key::Escape => {
+            if let input::Key::Escape = key {
                     if self.lose {
                         self.reset();
                     } else if self.paused == false {
@@ -55,8 +54,6 @@ impl GameState {
                         self.paused = false;
                     }
                 }
-                _ => {}
-            }
         }
 
     }
