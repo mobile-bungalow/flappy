@@ -13,7 +13,6 @@ extern crate gfx_graphics;
 // transitions in a sane way.
 extern crate sprite;
 
-
 // piston imports
 extern crate piston;
 
@@ -37,14 +36,13 @@ static WINSIZE: Size = Size {
     width: 350.0,
 };
 
-fn main() -> Result<(), u32> {
+fn main() {
     let mut window: PistonWindow =
         WindowSettings::new("Not FlappyBird", (WINSIZE.height, WINSIZE.width))
             .graphics_api(OpenGL::V3_2)
             .resizable(false)
             .build()
             .expect("Window didn't build");
-
 
     let mut texture_context = TextureContext {
         factory: window.factory.clone(),
@@ -66,7 +64,6 @@ fn main() -> Result<(), u32> {
     bird.set_scale(0.08, 0.08); // so this is a bad hack, but in the future use a standard sprite size
 
     while let Some(ev) = events.next(&mut window) {
-
         if let Some(p) = ev.press_args() {
             state.update(p);
             if !state.paused {
@@ -87,7 +84,6 @@ fn main() -> Result<(), u32> {
                     state.lose();
                 }
             }
-
         }
 
         if ev.render_args().is_some() {
@@ -127,9 +123,15 @@ fn main() -> Result<(), u32> {
 
                 bird.draw(c.transform, g);
                 // BIRD DRAWING CODE END
+                if state.lose {
+                    let loss = Image::new().rect(square(
+                        (WINSIZE.width - 75.0 * 2.5) / 2.0,
+                        (WINSIZE.height - 75.0 * 6.0) / 2.0,
+                        75.0,
+                    ));
+                    loss.draw(&am.game_over_tex, &ds, c.transform.scale(3.0, 1.0), g);
+                }
             });
         }
     }
-    Ok(())
 }
-
