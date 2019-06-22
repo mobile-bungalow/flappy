@@ -3,12 +3,12 @@ extern crate rand;
 use rand::Rng;
 use std::collections::VecDeque;
 // Max challenge for pipes
-const MINDIFF: f64 = 70.0;
-const MAXDIFF: f64 = 150.0;
+const MINDIFF: f64 = 50.0;
+const MAXDIFF: f64 = 90.0;
 
 // range for the gap
 const MAXHEIGHT: f64 = 450.0;
-const MINHEIGHT: f64 = 250.0;
+const MINHEIGHT: f64 = 350.0;
 
 const LATENT: u64 = 60;
 
@@ -32,7 +32,6 @@ impl Pipe {
             x: start,
         }
     }
-
 }
 
 pub fn update_pipe_state(
@@ -64,6 +63,4 @@ pub fn update_pipe_state(
             pipe_deque.push_back(Pipe::new(850.0, 0));
         }
     }
-
 }
-
