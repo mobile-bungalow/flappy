@@ -1,6 +1,5 @@
 
 extern crate rand;
-extern crate graphics;
 
 use rand::Rng;
 

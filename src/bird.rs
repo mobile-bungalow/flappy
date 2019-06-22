@@ -1,8 +1,4 @@
-use piston_window::*;
-
-extern crate graphics;
-extern crate piston;
-use piston::event_loop::{EventLoop, EventSettings, Events};
+use piston::input::Event;
 
 static G: f64 = 0.15;
 
@@ -28,11 +24,11 @@ impl Bird {
             up_vel: 0.0,
             collide: false,
             is_pressed: false,
-            rotation: 40.0,
+            rotation: 0.0,
         }
     }
 
-    pub fn update(&mut self, ev: &Event, args: &UpdateArgs) {
+    pub fn update(&mut self, ev: &Event, args: &input::UpdateArgs) {
         // accelerated fall over time determined by gravity
         // increment x position to track position relative to other objects
         self.window_pos += 1.0;
@@ -41,17 +37,18 @@ impl Bird {
             true => {
                 self.up_vel -= G;
                 self.ypos -= self.up_vel;
+                self.rotation = self.up_vel * -8.0;
             }
             false => {}
         }
     }
 
     ///behaviour determined by key presses
-    pub fn key_event(&mut self, button: piston::input::Button) {
-        if let Button::Keyboard(key) = button {
+    pub fn key_event(&mut self, button: input::Button) {
+        if let input::Button::Keyboard(key) = button {
             match key {
                 //if the key pressed is a space, bird jumps
-                Key::Space => {
+                input::Key::Space => {
                     self.up_vel = 4.0;
                     self.is_pressed = true;
                 }
