@@ -86,7 +86,13 @@ fn main() -> Result<(), u32> {
             if !state.paused && state.bird.is_pressed {
                 state.ticks += 1;
                 state.bird.update(&ev, u);
-                pipe::update_pipe_state(&mut state.pipe_deque, state.xvel, state.ticks);
+                pipe::update_pipe_state(
+                    &mut state.pipe_deque,
+                    state.xvel,
+                    state.ticks,
+                    &mut state.bird,
+                    &mut state.score,
+                );
                 if state.bird.ypos > 283.0 || state.bird.collide {
                     state.lose();
                 }

@@ -1,6 +1,3 @@
-
-use ncollide2d::math::Vector;
-use ncollide2d::shape::Cuboid;
 use piston::input::Event;
 
 static G: f64 = 0.15;
@@ -19,7 +16,7 @@ pub struct Bird {
     pub rotation: f64,
     // which image the bird is using, set by user
     pub flapping: bool,
-    pub hitbox: Cuboid<f64>,
+    pub hitbox: [f64 ;2],
 }
 
 impl Bird {
@@ -32,7 +29,7 @@ impl Bird {
             is_pressed: false,
             rotation: 0.0,
             flapping: false,
-            hitbox: Cuboid::new(Vector::new(10.0, 10.0)),
+            hitbox: [10.0 ; 2],
         }
     }
 
@@ -43,7 +40,7 @@ impl Bird {
         if self.is_pressed && !self.collide {
             self.up_vel -= G;
             self.ypos -= self.up_vel;
-            self.rotation = self.up_vel * -11.0
+                self.rotation = self.up_vel * -11.0;
         }
     }
 
