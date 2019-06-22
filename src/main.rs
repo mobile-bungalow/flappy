@@ -13,7 +13,6 @@ extern crate gfx_graphics;
 // transitions in a sane way.
 extern crate sprite;
 
-
 // piston imports
 extern crate piston;
 
@@ -45,7 +44,6 @@ fn main() -> Result<(), u32> {
             .build()
             .expect("Window didn't build");
 
-
     let mut texture_context = TextureContext {
         factory: window.factory.clone(),
         encoder: window.factory.create_command_buffer().into(),
@@ -66,7 +64,6 @@ fn main() -> Result<(), u32> {
     bird.set_scale(0.08, 0.08); // so this is a bad hack, but in the future use a standard sprite size
 
     while let Some(ev) = events.next(&mut window) {
-
         if let Some(p) = ev.press_args() {
             state.update(p);
             if !state.paused {
@@ -83,14 +80,13 @@ fn main() -> Result<(), u32> {
                 state.ticks += 1;
                 state.bird.update(&ev, u);
                 pipe::update_pipe_state(&mut state.pipe_deque, state.ticks);
-                if state.bird.ypos > 300.0 || state.bird.collide {
+                if state.bird.ypos > 285.0 || state.bird.collide {
                     state.lose();
                 }
             }
-
         }
 
-        if ev.render_args().is_some() {
+        if let Some(e) = ev.render_args() {
             // increment stage movement
             state.stage_offset -= state.xvel;
             state.stage_offset %= WINSIZE.width;
@@ -126,10 +122,27 @@ fn main() -> Result<(), u32> {
                 }
 
                 bird.draw(c.transform, g);
+
+                if state.ticks < 125 && !state.bird.is_pressed {
+                    let start = Image::new().rect(square(
+                        (WINSIZE.width - 75.0 * 2.6) / 2.0,
+                        (WINSIZE.height - 75.0 * 8.5) / 2.0,
+                        75.0,
+                    ));
+                    start.draw(&am.start_tex, &ds, c.transform.scale(3.0, 1.0), g);
+                }
+
                 // BIRD DRAWING CODE END
+                if state.lose {
+                    let loss = Image::new().rect(square(
+                        (WINSIZE.width - 75.0 * 2.5) / 2.0,
+                        (WINSIZE.height - 75.0 * 6.0) / 2.0,
+                        75.0,
+                    ));
+                    loss.draw(&am.game_over_tex, &ds, c.transform.scale(3.0, 1.0), g);
+                }
             });
         }
     }
     Ok(())
 }
-
