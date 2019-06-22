@@ -54,7 +54,6 @@ pub fn update_pipe_state(
             // lower than pipe lip
             if bird.ypos + PIPE_HEIGHT >= p.height || bird.ypos <= p.height - p.gap - PIPE_HEIGHT {
                 bird.collide = true;
-                print!("{}, {} \n", bird.ypos, PIPE_HEIGHT + p.height);
             }
         }
     }
