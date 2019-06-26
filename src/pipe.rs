@@ -41,7 +41,6 @@ pub fn update_pipe_state(
     xvel: f64,
     dt: u64,
     bird: &mut bird::Bird,
-    score: &mut u32,
 ) {
     if dt < LATENT {
         return;
