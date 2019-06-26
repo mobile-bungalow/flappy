@@ -3,7 +3,7 @@ pub mod game_state;
 pub mod pipe;
 pub mod tex_loader;
 
-// agnostic graphics backend imports
+// system agnostic graphics backend imports
 extern crate gfx;
 extern crate gfx_core;
 extern crate gfx_device_gl;
@@ -27,6 +27,7 @@ use piston::event_loop::{EventLoop, EventSettings, Events};
 
 //graphics APIS
 
+
 use gfx_graphics::TextureContext;
 use graphics::rectangle::*;
 use std::rc::Rc;
@@ -49,6 +50,9 @@ fn main() -> Result<(), u32> {
         encoder: window.factory.create_command_buffer().into(),
     };
 
+    //load font from the nether realm
+    let mut font = window.load_font("assets/8bit_font.ttf").unwrap();
+
     //set events at synced updates and FPS
     let mut events = Events::new(EventSettings::new().ups(60).max_fps(60));
     let ds = graphics::DrawState::default();
@@ -56,20 +60,23 @@ fn main() -> Result<(), u32> {
     let mut state = game_state::GameState::new(1.8, 0.0);
     let am: tex_loader::AssetMap = tex_loader::AssetMap::load_assets(&mut texture_context);
 
-    // the bird flapping up texture, for closure reasons
+    // bird flapping, not flapping, and pipe textures
     let unflap_tex = Rc::new(am.bird_tex.clone());
     let flap_tex = Rc::new(am.bird_up_tex.clone());
     let pipe_tex = Rc::new(am.pipe_tex.clone());
 
+    // '' '' except for sprites from the sprite crate
     let mut pipe = sprite::Sprite::from_texture(pipe_tex.clone());
     let mut reverse = sprite::Sprite::from_texture(pipe_tex.clone());
     let mut bird = sprite::Sprite::from_texture(unflap_tex.clone());
+    let text = text::Text::new(10);
 
     bird.set_scale(0.08, 0.08);
     pipe.set_scale(0.5, 0.5);
     reverse.set_scale(0.5, 0.5);
     reverse.set_rotation(180.0);
 
+    // main event loop
     while let Some(ev) = events.next(&mut window) {
         if let Some(p) = ev.press_args() {
             state.update(p);
@@ -116,34 +123,34 @@ fn main() -> Result<(), u32> {
                     let j = Image::new().rect(square(x_coord, 0.0, WINSIZE.width));
                     // call makeup : image itself, context mutations, graphics
                     j.draw(&am.bg_tex, &ds, c.transform, g);
-
-                    for pipe_idx in 0..state.pipe_deque.len() {
-                        let p = &mut state.pipe_deque[pipe_idx];
-                        pipe.set_position(p.x, p.height);
-                        reverse.set_position(p.x, p.height - p.gap - 400.0);
-                        pipe.draw(c.transform, g);
-                        reverse.draw(c.transform, g);
-                    }
-
-                    // BACKGROUND PARALLAX CODE END
-
-                    // BIRD DRAWING CODE
-                    bird.set_position(state.bird_pos, state.bird.ypos);
-                    bird.set_rotation(state.bird.rotation);
-                    // incorrect state upward
-                    if !state.bird.flapping && state.bird.rotation < 0.0 {
-                        bird.set_texture(unflap_tex.clone());
-                        state.bird.flapping = true;
-                    }
-                    //incorrect state downward
-                    if state.bird.flapping && state.bird.rotation > 0.0 {
-                        bird.set_texture(flap_tex.clone());
-                        state.bird.flapping = false;
-                    }
-                    bird.draw(c.transform, g);
-
-                    // BIRD DRAWING CODE END
                 }
+
+                for pipe_idx in 0..state.pipe_deque.len() {
+                    let p = &mut state.pipe_deque[pipe_idx];
+                    pipe.set_position(p.x, p.height);
+                    reverse.set_position(p.x, p.height - p.gap - 400.0);
+                    pipe.draw(c.transform, g);
+                    reverse.draw(c.transform, g);
+                }
+
+                // BACKGROUND PARALLAX CODE END
+
+                // BIRD DRAWING CODE
+                bird.set_position(state.bird_pos, state.bird.ypos);
+                bird.set_rotation(state.bird.rotation);
+                // incorrect state upward
+                if !state.bird.flapping && state.bird.rotation < 0.0 {
+                    bird.set_texture(unflap_tex.clone());
+                    state.bird.flapping = true;
+                }
+                //incorrect state downward
+                if state.bird.flapping && state.bird.rotation > 0.0 {
+                    bird.set_texture(flap_tex.clone());
+                    state.bird.flapping = false;
+                }
+                bird.draw(c.transform, g);
+
+                // BIRD DRAWING CODE END
 
                 //render ground separately
                 //ground has to render after bird bc bird falls behind ground
@@ -162,6 +169,15 @@ fn main() -> Result<(), u32> {
                         75.0,
                     ));
                     start.draw(&am.start_tex, &ds, c.transform.scale(3.0, 1.0), g);
+                } else {
+                    text.draw(
+                        &(1234567890 + state.ticks).to_string(),
+                        &mut font,
+                        &ds,
+                        c.transform.trans(330.0, 50.0),
+                        g,
+                    )
+                    .unwrap();
                 }
 
                 //render game over
@@ -173,6 +189,7 @@ fn main() -> Result<(), u32> {
                     ));
                     loss.draw(&am.game_over_tex, &ds, c.transform.scale(3.0, 1.0), g);
                 }
+
             });
         }
     }

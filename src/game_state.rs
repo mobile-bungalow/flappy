@@ -65,7 +65,6 @@ impl GameState {
                 pipe.counted = true
             }
         }
-        println!("{}", self.score)
     }
 
     pub fn lose(&mut self) {
