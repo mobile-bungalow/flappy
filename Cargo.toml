@@ -3,7 +3,9 @@ name = "flappy"
 version = "0.1.0"
 authors = ["mobile-bungalow <pwmay@ucsc.edu>"]
 edition = "2018"
-
+description = "a rust version of a game that is definetly not flappy bird using the piston engine"
+license = "MIT"
+readme = "README.md"
 
 [dependencies]
 fps_counter = "1.0.0"
@@ -12,15 +14,12 @@ gfx = "0.17.0"
 gfx_core = "0.8.0"
 gfx_device_gl = "0.15.0"
 
-# vscode makes links clickable, so for
-# ease of reference I put some URLS in this toml
 pistoncore-input = "0.28.0"
-piston_window = "0.99.0"          # https://crates.io/crates/piston_window
-piston = "0.48.0"                 # https://crates.io/crates/piston
-piston2d-gfx_graphics = "0.61.0"  # https://crates.io/crates/piston2d-gfx_graphics
-piston2d-sprite = "0.55.0"        # https://crates.io/crates/piston2d-sprite
-
-ncollide2d = "0.18"       # https://ncollide.org/rustdoc/ncollide2d/index.html
+piston_window = "0.99.0"        
+piston = "0.48.0"                
+piston2d-gfx_graphics = "0.61.0"  
+piston2d-sprite = "0.55.0"
+        
 
 shader_version = "0.6.0"
 piston2d-graphics = "0.32.0"

@@ -97,7 +97,7 @@ fn main() -> Result<(), u32> {
                     &mut state.bird,
                 );
                 state.update_score();
-                state.xvel += (state.score as f64) / 3000.0;
+                state.xvel += f64::from(state.score) / 3000.0;
 
                 if state.bird.ypos > 283.0 || state.bird.collide {
                     state.lose();
