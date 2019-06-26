@@ -198,7 +198,7 @@ fn main() -> Result<(), u32> {
                             &("PAUSED"),
                             &mut font,
                             &ds,
-                            c.transform.trans(260.0, 170.0),
+                            c.transform.trans(245.0, 200.0),
                             g,
                         )
                         .unwrap();
