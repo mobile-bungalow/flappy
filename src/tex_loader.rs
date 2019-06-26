@@ -2,13 +2,13 @@ use gfx_graphics::*;
 
 static TEXLIST: [&str; 7] = [
     //new background that does not contain ground
-    "assets/bg_new.png",
-    "assets/bird.png",
-    "assets/pipe.png",
-    "assets/bird_up.png",
-    "assets/gameover.png",
-    "assets/message.png",
-    "assets/base.png",
+    "src/assets/bg_new.png",
+    "src/assets/bird.png",
+    "src/assets/pipe.png",
+    "src/assets/bird_up.png",
+    "src/assets/gameover.png",
+    "src/assets/message.png",
+    "src/assets/base.png",
 ];
 
 /// The map of all textures that OPengl needs in order to

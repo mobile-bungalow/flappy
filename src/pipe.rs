@@ -2,8 +2,9 @@ use crate::bird;
 extern crate rand;
 use rand::Rng;
 use std::collections::VecDeque;
+
 // Max challenge for pipes
-const MINDIFF: f64 = 50.0;
+const MINDIFF: f64 = 75.0;
 const MAXDIFF: f64 = 90.0;
 
 // range for the gap

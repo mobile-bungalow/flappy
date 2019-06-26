@@ -16,3 +16,9 @@ $ flappy
 ### Controls 
 
 Press space to jump and escape to reset and pause.
+
+---
+
+### Changelog
+
+added resources directory

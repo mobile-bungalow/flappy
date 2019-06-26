@@ -50,7 +50,7 @@ fn main() -> Result<(), u32> {
     };
 
     //load font from the nether realm
-    let mut font = window.load_font("assets/flappyfont.ttf").unwrap();
+    let mut font = window.load_font("src/assets/flappyfont.ttf").unwrap();
 
     //set events at synced updates and FPS
     let mut events = Events::new(EventSettings::new().ups(60).max_fps(60));
