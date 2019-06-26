@@ -27,7 +27,6 @@ use piston::event_loop::{EventLoop, EventSettings, Events};
 
 //graphics APIS
 
-
 use gfx_graphics::TextureContext;
 use graphics::rectangle::*;
 use std::rc::Rc;
@@ -51,7 +50,7 @@ fn main() -> Result<(), u32> {
     };
 
     //load font from the nether realm
-    let mut font = window.load_font("assets/8bit_font.ttf").unwrap();
+    let mut font = window.load_font("assets/flappyfont.ttf").unwrap();
 
     //set events at synced updates and FPS
     let mut events = Events::new(EventSettings::new().ups(60).max_fps(60));
@@ -69,7 +68,7 @@ fn main() -> Result<(), u32> {
     let mut pipe = sprite::Sprite::from_texture(pipe_tex.clone());
     let mut reverse = sprite::Sprite::from_texture(pipe_tex.clone());
     let mut bird = sprite::Sprite::from_texture(unflap_tex.clone());
-    let text = text::Text::new(10);
+    let text = text::Text::new(25);
 
     bird.set_scale(0.08, 0.08);
     pipe.set_scale(0.5, 0.5);
@@ -112,7 +111,7 @@ fn main() -> Result<(), u32> {
             // increment stage movement
             state.stage_offset -= state.xvel;
             state.stage_offset %= WINSIZE.width;
-            window.draw_2d(&ev, |c, g, _| {
+            window.draw_2d(&ev, |c, g, device| {
                 // clear bg
                 clear([1.0; 4], g);
                 // BACKGROUND PARALLAX CODE BEGIN
@@ -170,14 +169,19 @@ fn main() -> Result<(), u32> {
                     ));
                     start.draw(&am.start_tex, &ds, c.transform.scale(3.0, 1.0), g);
                 } else {
+                    let mut score_string = "Score: ".to_string();
+                    let score_string2 = state.score.to_string();
+                    score_string.push_str(&score_string2);
                     text.draw(
-                        &(1234567890 + state.ticks).to_string(),
+                        &(score_string),
                         &mut font,
                         &ds,
                         c.transform.trans(330.0, 50.0),
                         g,
                     )
                     .unwrap();
+
+                    font.factory.encoder.flush(device);
                 }
 
                 //render game over
@@ -189,7 +193,6 @@ fn main() -> Result<(), u32> {
                     ));
                     loss.draw(&am.game_over_tex, &ds, c.transform.scale(3.0, 1.0), g);
                 }
-
             });
         }
     }
