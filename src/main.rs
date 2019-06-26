@@ -167,6 +167,16 @@ fn main() -> Result<(), u32> {
                         75.0,
                     ));
                     start.draw(&am.start_tex, &ds, c.transform.scale(3.0, 1.0), g);
+                    text::Text::new_color([1.0, 1.0, 1.0, 1.0], 15)
+                        .draw(
+                            &("PRESS SPACE TO JUMP AND ESC TO PAUSE"),
+                            &mut font,
+                            &ds,
+                            c.transform.trans(150.0, 130.0),
+                            g,
+                        )
+                        .unwrap();
+                    font.factory.encoder.flush(device);
                 } else {
                     let mut score_string = "Score: ".to_string();
                     let score_string2 = state.score.to_string();
@@ -179,6 +189,20 @@ fn main() -> Result<(), u32> {
                         g,
                     )
                     .unwrap();
+
+                    font.factory.encoder.flush(device);
+                }
+
+                if state.paused {
+                    text::Text::new_color([1.0, 1.0, 1.0, 1.0], 45)
+                        .draw(
+                            &("PAUSED"),
+                            &mut font,
+                            &ds,
+                            c.transform.trans(260.0, 170.0),
+                            g,
+                        )
+                        .unwrap();
 
                     font.factory.encoder.flush(device);
                 }
