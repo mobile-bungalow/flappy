@@ -1,9 +1,11 @@
 ## Flappy
 
+A rust bird jumping game that is definetly not flappy bird.
+
 run with 
 
 ```bash
 cargo run --release
 ```
 
-press space to jump. and escape to reset and paush
+Press space to jump and escape to reset and pause.
