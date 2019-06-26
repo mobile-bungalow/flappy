@@ -68,7 +68,7 @@ fn main() -> Result<(), u32> {
     let mut pipe = sprite::Sprite::from_texture(pipe_tex.clone());
     let mut reverse = sprite::Sprite::from_texture(pipe_tex.clone());
     let mut bird = sprite::Sprite::from_texture(unflap_tex.clone());
-    let text = text::Text::new(25);
+    let text = text::Text::new_color([1.0, 1.0, 1.0, 1.0], 25);
 
     bird.set_scale(0.08, 0.08);
     pipe.set_scale(0.5, 0.5);
@@ -86,8 +86,6 @@ fn main() -> Result<(), u32> {
         }
 
         if let Some(u) = ev.update_args() {
-            // increment challenge as it runs
-            //state.xvel = (state.ticks as f64 / 3000.0) + 1.0;
             //  check and set pipe state
             if !state.paused && state.bird.is_pressed {
                 state.ticks += 1;
@@ -99,11 +97,12 @@ fn main() -> Result<(), u32> {
                     &mut state.bird,
                     &mut state.score,
                 );
+                state.update_score();
+                state.xvel += (state.score as f64) / 300.0;
 
                 if state.bird.ypos > 283.0 || state.bird.collide {
                     state.lose();
                 }
-                state.update_score();
             }
         }
 
@@ -176,7 +175,7 @@ fn main() -> Result<(), u32> {
                         &(score_string),
                         &mut font,
                         &ds,
-                        c.transform.trans(330.0, 50.0),
+                        c.transform.trans(290.0, 50.0),
                         g,
                     )
                     .unwrap();

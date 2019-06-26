@@ -30,7 +30,7 @@ impl GameState {
 
         GameState {
             ticks: 0,
-            xvel: 1.0,
+            xvel: 1.7,
             stage_offset,
             bird_pos: 340.0,
             score: 0,
