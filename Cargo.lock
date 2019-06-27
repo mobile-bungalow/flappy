@@ -237,12 +237,13 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 
 [[package]]
 name = "flappy"
-version = "0.1.1"
+version = "0.2.0"
 dependencies = [
  "fps_counter 1.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "gfx 0.17.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "gfx_core 0.8.3 (registry+https://github.com/rust-lang/crates.io-index)",
  "gfx_device_gl 0.15.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "image 0.21.2 (registry+https://github.com/rust-lang/crates.io-index)",
  "piston 0.48.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "piston2d-gfx_graphics 0.61.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "piston2d-graphics 0.32.0 (registry+https://github.com/rust-lang/crates.io-index)",
