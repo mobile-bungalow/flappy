@@ -21,4 +21,4 @@ Press space to jump and escape to reset and pause.
 
 ### Changelog
 
-added resources directory
+Versions before 0.4.0 do not work. This crate now serves as an example of how to load piston assets at compilation time.

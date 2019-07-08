@@ -1,6 +1,6 @@
 [package]
 name = "flappy"
-version = "0.3.0"
+version = "0.4.0"
 authors = ["mobile-bungalow","kaavyajayram"]
 edition = "2018"
 description = "a rust version of a game that is definetly not flappy bird using the piston engine"
