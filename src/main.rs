@@ -27,7 +27,7 @@ use piston::event_loop::{EventLoop, EventSettings, Events};
 
 //graphics APIS
 
-use gfx_graphics::TextureContext;
+use gfx_graphics::{GlyphCache, TextureContext};
 use graphics::rectangle::*;
 use std::rc::Rc;
 
@@ -50,7 +50,21 @@ fn main() -> Result<(), u32> {
     };
 
     //load font from the nether realm
-    let mut font = window.load_font("src/assets/flappyfont.ttf").unwrap();
+    // so for this to work on cargo we need to instantiate a font form bytes
+    let mut font: gfx_graphics::GlyphCache<
+        'static,
+        gfx_device_gl::Factory,
+        gfx_device_gl::Resources,
+        gfx_device_gl::CommandBuffer,
+    > = GlyphCache::from_bytes(
+        include_bytes!("assets/flappyfont.ttf"),
+        TextureContext {
+            factory: window.factory.clone(),
+            encoder: window.factory.create_command_buffer().into(),
+        },
+        TextureSettings::new(),
+    )
+    .unwrap();
 
     //set events at synced updates and FPS
     let mut events = Events::new(EventSettings::new().ups(60).max_fps(60));
