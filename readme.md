@@ -3,6 +3,9 @@
 A bird jumping game that is definitely not Flappy Bird.
 
 ---
+[![crates.io](https://img.shields.io/crates/v/flappy.svg)](https://crates.io/crates/flappy)
+
+
 ### Running
 
 run with 
