@@ -4,7 +4,7 @@ version = "0.4.0"
 authors = ["mobile-bungalow","kaavyajayram"]
 repository = "https://github.com/mobile-bungalow/flappy"
 edition = "2018"
-description = "a rust version of a game that is definetly not flappy bird using the piston engine"
+description = "a rust version of a game that is definitely not flappy bird that uses the piston engine"
 license = "MIT"
 readme = "README.md"
 
@@ -16,14 +16,13 @@ gfx_core = "0.8.0"
 gfx_device_gl = "0.15.0"
 
 pistoncore-input = "0.28.0"
-piston_window = "0.99.0"        
-piston = "0.48.0"                
-piston2d-gfx_graphics = "0.61.0"  
+piston_window = "0.99.0"
+piston = "0.48.0"
+piston2d-gfx_graphics = "0.61.0"
 piston2d-sprite = "0.55.0"
-        
+
 image = "0.21.2"
 shader_version = "0.6.0"
 piston2d-graphics = "0.32.0"
 
 rand = "0.6.5" # for pipe init
-
