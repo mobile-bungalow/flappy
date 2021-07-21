@@ -80,7 +80,7 @@ fn main() -> Result<(), u32> {
 
     // '' '' except for sprites from the sprite crate
     let mut pipe = sprite::Sprite::from_texture(pipe_tex.clone());
-    let mut reverse = sprite::Sprite::from_texture(pipe_tex.clone());
+    let mut reverse = sprite::Sprite::from_texture(pipe_tex);
     let mut bird = sprite::Sprite::from_texture(unflap_tex.clone());
     let text = text::Text::new_color([1.0, 1.0, 1.0, 1.0], 25);
 
@@ -182,7 +182,7 @@ fn main() -> Result<(), u32> {
                     start.draw(&am.start_tex, &ds, c.transform.scale(3.0, 1.0), g);
                     text::Text::new_color([1.0, 1.0, 1.0, 1.0], 15)
                         .draw(
-                            &("PRESS SPACE TO JUMP AND ESC TO PAUSE"),
+                            "PRESS SPACE TO JUMP AND ESC TO PAUSE",
                             &mut font,
                             &ds,
                             c.transform.trans(150.0, 130.0),
@@ -209,7 +209,7 @@ fn main() -> Result<(), u32> {
                 if state.paused {
                     text::Text::new_color([1.0, 1.0, 1.0, 1.0], 45)
                         .draw(
-                            &("PAUSED"),
+                            "PAUSED",
                             &mut font,
                             &ds,
                             c.transform.trans(245.0, 200.0),
