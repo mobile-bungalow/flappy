@@ -1,7 +1,6 @@
 extern crate image;
 
 use gfx_graphics::*;
-use image::DynamicImage::ImageRgba8;
 
 
 static TEXLIST: [&[u8]; 7] = [
